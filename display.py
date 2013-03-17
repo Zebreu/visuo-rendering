@@ -52,8 +52,10 @@ grabcut_iterations = 5
 white = (255,255,255)
 black = (0,0,0)
 
-width = 1600
-height = 900
+width = 1300
+height = 700
+
+large_threshold = 500
 
 to_display = pygame.sprite.OrderedUpdates()
 current_picture = [None]
@@ -106,7 +108,14 @@ class Imagined(pygame.sprite.Sprite):
         for c_and_p in colors_and_pixels:
             imagepixels[c_and_p[1][0]][c_and_p[1][1]] = c_and_p[0]
             imagealpha[c_and_p[1][0]][c_and_p[1][1]] = 255
-            
+
+    def resize(self):
+        image_width = self.rect.right - self.rect.left
+        image_height = self.rect.bottom - self.rect.top
+
+        if image_width > large_threshold or image_height > large_threshold:
+            self.image = pygame.transform.scale(self.image, (image_width/2, image_height/2))
+
     def put_inside_frame(self):
         """ Repositions the image inside the frame """
         if self.rect.top < 0:
@@ -271,7 +280,14 @@ def cut_surface(surface,pixels):
     pixelsurface = pygame.surfarray.pixels3d(surface)
     pixelarray = numpy.array(pixelsurface)
 
-    colors = [pixelarray[pixel[0]][pixel[1]] for pixel in pixels]
+    colors = []
+    for pixel in pixels:
+        if len(pixel) > 1:
+            if len(pixelarray) < pixel[0]:
+                if len(pixelarray[pixel[0]]) < pixel[1]:
+                    colors.append(pixelarray[pixel[0]][pixel[1]])
+
+    #colors = [pixelarray[pixel[0]][pixel[1]] for pixel in pixels]
 
     return colors
 
@@ -382,11 +398,10 @@ def imagine(thing, position=(0.5,0.5), draw=True, grabcut=doingGrabcut):
         colors = cut_surface(image,pixels)
 
         imagined = Imagined(colors,pixels,box,position)
-        
+        imagined.resize()
         imagined.put_inside_frame()
-        
         to_display.add(imagined)
-        
+
         print thing
 
         if draw:
