@@ -282,9 +282,11 @@ def cut_surface(surface,pixels):
 
     colors = []
     for pixel in pixels:
+        #print pixel
         if len(pixel) > 1:
-            if len(pixelarray) < pixel[0]:
-                if len(pixelarray[pixel[0]]) < pixel[1]:
+            #print len(pixelarray), len(pixelarray[0])
+            if len(pixelarray) > pixel[0]:
+                if len(pixelarray[pixel[0]]) > pixel[1]:
                     colors.append(pixelarray[pixel[0]][pixel[1]])
 
     #colors = [pixelarray[pixel[0]][pixel[1]] for pixel in pixels]
@@ -471,3 +473,5 @@ def draw_everything():
         pygame.display.flip()
 
     pygame.quit()
+
+imagine("person")
