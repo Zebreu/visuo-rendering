@@ -87,7 +87,9 @@ class Imagined(pygame.sprite.Sprite):
         self.box = box
         self.offset_pixels(pixels)
         self.image_coloring()
+        self.resize()
         self.rect.center = self.find_position(position)
+        self.put_inside_frame()
 
     def find_position(self,position):
         """ Assign a position to the object according to given values between 0 and 1, proportionally to the resolution """
@@ -110,14 +112,17 @@ class Imagined(pygame.sprite.Sprite):
             imagealpha[c_and_p[1][0]][c_and_p[1][1]] = 255
 
     def resize(self):
+        """ Scales down images larger than a threshold """
         image_width = self.rect.right - self.rect.left
         image_height = self.rect.bottom - self.rect.top
 
         if image_width > large_threshold or image_height > large_threshold:
             self.image = pygame.transform.scale(self.image, (image_width/2, image_height/2))
 
+        self.rect = self.image.get_rect()
+
     def put_inside_frame(self):
-        """ Repositions the image inside the frame """
+        """ Moves the image inside the frame """
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.left < 0:
@@ -400,8 +405,6 @@ def imagine(thing, position=(0.5,0.5), draw=True, grabcut=doingGrabcut):
         colors = cut_surface(image,pixels)
 
         imagined = Imagined(colors,pixels,box,position)
-        imagined.resize()
-        imagined.put_inside_frame()
         to_display.add(imagined)
 
         print thing
