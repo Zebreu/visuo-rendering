@@ -473,5 +473,3 @@ def draw_everything():
         pygame.display.flip()
 
     pygame.quit()
-
-imagine("person")
