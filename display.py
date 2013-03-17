@@ -106,6 +106,17 @@ class Imagined(pygame.sprite.Sprite):
         for c_and_p in colors_and_pixels:
             imagepixels[c_and_p[1][0]][c_and_p[1][1]] = c_and_p[0]
             imagealpha[c_and_p[1][0]][c_and_p[1][1]] = 255
+            
+    def put_inside_frame(self):
+        """ Repositions the image inside the frame """
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > width:
+            self.rect.right = width
+        if self.rect.bottom > height:
+            self.rect.bottom = height
 
 def cut_out(thing):
     """ Withdraw an unwanted known object from a full picture  """
@@ -320,8 +331,8 @@ def find_position(angle, distance, main_position):
     y_distance = y_direction*y_factor*(distance/2.0)
     x_position = main_position[0]+x_distance
     y_position = main_position[1]+y_distance
-    #x_position = test_margins(x_position)
-    #y_position = test_margins(y_position)
+    x_position = test_margins(x_position)
+    y_position = test_margins(y_position)
 
     return [x_position,y_position]
 
@@ -371,8 +382,12 @@ def imagine(thing, position=(0.5,0.5), draw=True, grabcut=doingGrabcut):
         colors = cut_surface(image,pixels)
 
         imagined = Imagined(colors,pixels,box,position)
-
+        
+        imagined.put_inside_frame()
+        
         to_display.add(imagined)
+        
+        print thing
 
         if draw:
             draw_everything()
