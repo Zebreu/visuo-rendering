@@ -38,6 +38,8 @@ def main(number=-1,filtering=True,randomized=False):
             match = re.search("256x256",a.contents[0])
             if match == None:
                 folders.append(a.contents[0])
+        else:
+            folders.append(a.contents[0])
     folders = folders[5:]
     if number == -1:
         pass
