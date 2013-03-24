@@ -53,14 +53,14 @@ def main(number=-1,filtering=True,randomized=False):
         parsed = parse(website)
         for a in parsed.findAll('a'):
           if a.contents[0][-3:] == "xml":
-              urllib.urlretrieve(website+a.contents[0], os.path.join(data_directory,a.contents[0]))
+              urllib.urlretrieve(website+a.contents[0], os.path.join(data_directory,folder[:-1]+"---"+a.contents[0]))
     for folder in folders:
         print "Images for: ", folder
         website = "http://labelme.csail.mit.edu/Images/"+folder
         parsed = parse(website)
         for a in parsed.findAll('a'):
           if a.contents[0][-3:] == "jpg":
-              urllib.urlretrieve(website+a.contents[0], os.path.join(data_directory,a.contents[0]))
+              urllib.urlretrieve(website+a.contents[0], os.path.join(data_directory,folder[:-1]+"---"+a.contents[0]))
 
     
     
