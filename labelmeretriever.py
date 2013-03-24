@@ -48,12 +48,14 @@ def main(number=-1,filtering=True,randomized=False):
     else:
         folders = folders[0:number]
     for folder in folders:
+        print "Annotations for: ", folder
         website = "http://labelme.csail.mit.edu/Annotations/"+folder
         parsed = parse(website)
         for a in parsed.findAll('a'):
           if a.contents[0][-3:] == "xml":
               urllib.urlretrieve(website+a.contents[0], os.path.join(data_directory,a.contents[0]))
     for folder in folders:
+        print "Images for: ", folder
         website = "http://labelme.csail.mit.edu/Images/"+folder
         parsed = parse(website)
         for a in parsed.findAll('a'):
